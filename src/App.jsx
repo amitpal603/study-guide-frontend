@@ -6,6 +6,8 @@ import About from './components/main/About'
 import Help from './components/main/Help'
 import SignUp from './components/main/SignUp'
 import Login from './components/main/Login'
+import Mg from './components/main/Mg'
+import Aktu from './components/main/Aktu'
 
 function App() {
   return (
@@ -18,6 +20,8 @@ function App() {
           <Route path='/help' element={<Help/>}/>
           <Route path='/sign-up' element={<SignUp/>}/>
           <Route path='/login-account' element={<Login/>}/>
+          <Route path='/mgkvp-university' element={<Mg/>}/>
+          <Route path='/aktu-university' element={<Aktu/>}/>
         </Routes>
       </div>
     </div>

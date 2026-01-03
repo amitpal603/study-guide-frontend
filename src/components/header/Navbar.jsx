@@ -9,7 +9,7 @@ function Navbar() {
   const links = [
     { to: "/", label: "Home" },
     { to: "/about", label: "About" },
-    { to: "/help", label: "Help" },
+    { to: "/help", label: "Help" }
   ];
 
   const handleAccountChange = (e) => {
@@ -22,7 +22,17 @@ function Navbar() {
     // Reset to default after navigation
     e.target.value = "Account";
   };
+  const handleUniversityChange = (e) => {
+    const value = e.target.value
+    if(value === "Mgkvp"){
+      navigate("/mgkvp-university")
+    }
+    else if(value === "Aktu"){
+      navigate("/aktu-university")
+    }
 
+    e.target.value = "University"
+  }
   return (
     <>
       <nav className="bg-[#F67280] w-full relative z-50 shadow-lg">
@@ -59,7 +69,15 @@ function Navbar() {
                 </li>
               ))}
             </ul>
-
+              <div>
+                <select name="" id=""
+                onChange={handleUniversityChange}
+                >
+                  <option value="University">University</option>
+                  <option value="Mgkvp">Mgkvp</option>
+                  <option value="Aktu">Aktu</option>
+                </select>
+              </div>
             {/* Account Dropdown - Desktop */}
             <div className="hidden md:block flex-shrink-0">
               <select
