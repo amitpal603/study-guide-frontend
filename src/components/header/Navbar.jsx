@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import study from "/src/assets/study.jpg";
 import { NavLink, useNavigate } from "react-router-dom";
+import study from "/src/assets/study.jpg";
 
 function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -9,7 +9,7 @@ function Navbar() {
   const links = [
     { to: "/", label: "Home" },
     { to: "/about", label: "About" },
-    { to: "/help", label: "Help" }
+    { to: "/help", label: "Help" },
   ];
 
   const handleAccountChange = (e) => {
@@ -19,39 +19,40 @@ function Navbar() {
     } else if (value === "Login") {
       navigate("/login-account");
     }
-    // Reset to default after navigation
     e.target.value = "Account";
   };
-  const handleUniversityChange = (e) => {
-    const value = e.target.value
-    if(value === "Mgkvp"){
-      navigate("/mgkvp-university")
-    }
-    else if(value === "Aktu"){
-      navigate("/aktu-university")
-    }
 
-    e.target.value = "University"
-  }
+  const handleUniversityChange = (e) => {
+    const value = e.target.value;
+    if (value === "Mgkvp") {
+      navigate("/mgkvp-university");
+    } else if (value === "Aktu") {
+      navigate("/aktu-university");
+    }
+    e.target.value = "University";
+  };
+
   return (
     <>
-      <nav className="bg-[#F67280] w-full relative z-50 shadow-lg">
+      <nav className="bg-[#F67280] w-full  z-50 shadow-lg fixed">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-20 gap-1">
+          <div className="flex items-center justify-between h-20 gap-2">
             {/* Logo */}
             <div className="flex-shrink-0 flex gap-2 sm:gap-3 justify-center items-center">
-              <img
-                src={study}
-                alt="Logo"
-                className="h-12 w-12 sm:h-16 sm:w-16 rounded-full object-cover border-2 border-white shadow-md hover:scale-105 transition-transform duration-200"
-              />
+              <div className="h-12 w-12 sm:h-16 sm:w-16 rounded-full overflow-hidden border-2 border-white shadow-md hover:scale-105 transition-transform duration-200">
+                <img
+                  src={study}
+                  alt="Study"
+                  className="h-full w-full object-cover"
+                />
+              </div>
               <h1 className="text-lg sm:text-xl lg:text-2xl text-white font-bold whitespace-nowrap">
                 Study <span className="text-[#3674b5]">Gu</span>ide
               </h1>
             </div>
 
             {/* Desktop Navigation Links - Centered */}
-            <ul className="hidden md:flex space-x-2 lg:space-x-4 flex-1 justify-center md:ml-120">
+            <ul className="hidden md:flex space-x-2 lg:space-x-4 flex-1 justify-center md:ml-85">
               {links.map((link) => (
                 <li key={link.label}>
                   <NavLink
@@ -69,15 +70,23 @@ function Navbar() {
                 </li>
               ))}
             </ul>
-              <div>
-                <select name="" id=""
+
+            {/* University Dropdown - Desktop */}
+            <div className="hidden md:block flex-shrink-0">
+              <select
                 onChange={handleUniversityChange}
-                >
-                  <option value="University">University</option>
-                  <option value="Mgkvp">Mgkvp</option>
-                  <option value="Aktu">Aktu</option>
-                </select>
-              </div>
+                className="bg-white text-[#F67280] font-medium text-sm lg:text-base px-3 lg:px-5 py-2 lg:py-2.5 rounded-md border-2 border-white shadow-md hover:bg-gray-50 hover:shadow-lg transition-all duration-200 cursor-pointer focus:outline-none focus:ring-2 focus:ring-white focus:ring-opacity-60 appearance-none pr-8 lg:pr-10 bg-[length:1.2em] lg:bg-[length:1.5em] bg-[right_0.4rem_center] lg:bg-[right_0.5rem_center] bg-no-repeat"
+                style={{
+                  backgroundImage:
+                    "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%23F67280' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14L2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E\")",
+                }}
+              >
+                <option value="University">University</option>
+                <option value="Mgkvp">MGKVP</option>
+                <option value="Aktu">AKTU</option>
+              </select>
+            </div>
+
             {/* Account Dropdown - Desktop */}
             <div className="hidden md:block flex-shrink-0">
               <select
@@ -146,11 +155,13 @@ function Navbar() {
         {/* Sidebar Header */}
         <div className="flex items-center justify-between p-4 border-b border-white border-opacity-30 sticky top-0 bg-[#F67280] z-10">
           <div className="flex items-center space-x-2">
-            <img
-              src={study}
-              alt="Logo"
-              className="h-10 w-10 rounded-full object-cover border-2 border-white shadow-md"
-            />
+            <div className="h-10 w-10 rounded-full overflow-hidden border-2 border-white shadow-md">
+              <img
+                src={study}
+                alt="Study"
+                className="h-full w-full object-cover"
+              />
+            </div>
             <h2 className="text-white text-base sm:text-lg font-bold">
               Study <span className="text-[#3674b5]">Gu</span>ide
             </h2>
@@ -206,6 +217,25 @@ function Navbar() {
             ))}
           </ul>
 
+          {/* University Section - Mobile */}
+          <div className="mt-6 pt-4 border-t border-white border-opacity-30">
+            <h3 className="text-white text-sm font-semibold mb-3 px-2 uppercase tracking-wide">
+              University
+            </h3>
+            <select
+              onChange={handleUniversityChange}
+              className="w-full bg-white text-[#F67280] font-medium text-base px-4 py-3 rounded-lg border-2 border-white shadow-md hover:bg-gray-50 transition-all duration-200 cursor-pointer focus:outline-none focus:ring-2 focus:ring-white focus:ring-opacity-60 appearance-none pr-10 bg-[length:1.2em] bg-[right_0.5rem_center] bg-no-repeat"
+              style={{
+                backgroundImage:
+                  "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%23F67280' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14L2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E\")",
+              }}
+            >
+              <option value="University">Select University</option>
+              <option value="Mgkvp">MGKVP</option>
+              <option value="Aktu">AKTU</option>
+            </select>
+          </div>
+
           {/* Account Section - Mobile */}
           <div className="mt-6 pt-4 border-t border-white border-opacity-30">
             <h3 className="text-white text-sm font-semibold mb-2 px-2 uppercase tracking-wide">
@@ -232,7 +262,7 @@ function Navbar() {
                 className="block w-full text-left bg-white text-[#F67280] font-semibold text-base py-3 px-4 rounded-lg hover:bg-gray-50 hover:shadow-md transition-all duration-200 active:scale-95"
               >
                 Login
-             </NavLink>
+              </NavLink>
             </div>
           </div>
         </nav>

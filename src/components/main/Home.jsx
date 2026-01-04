@@ -3,7 +3,7 @@ import HomeContent from './HomeContent'
 
 function Home() {
   return (
-    <div>
+    <div className=''>
       <HomeContent/>
     </div>
   )
