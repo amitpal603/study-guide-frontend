@@ -72,7 +72,7 @@ function HomeContent() {
               <button 
               disabled={!searchQuery}
                 type="submit"
-                className=" disabled:cursor-not-allowed bg-[#3674b5] text-white px-6 sm:px-8 py-4 sm:py-5 hover:bg-[#2d5d95] transition-all duration-300 flex items-center justify-center group"
+                className=" active:scale-95 disabled:cursor-not-allowed bg-[#3674b5] text-white px-6 sm:px-8 py-4 sm:py-5 hover:bg-[#2d5d95] transition-all duration-300 flex items-center justify-center group"
                 aria-label="Search"
               >
                 <BsSearch className="text-xl sm:text-2xl group-hover:scale-110 transition-transform duration-300" />
