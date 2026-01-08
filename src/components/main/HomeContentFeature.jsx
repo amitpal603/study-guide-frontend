@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom'
 function HomeContentFeature() {
     const navigate = useNavigate()
   return (
-    <div className='bg-gradient-to-br from-[#c06c84] to-[#a54d68] text-white w-full py-16 lg:py-24 relative overflow-hidden'>
+    <div className='bg-gradient-to-br from-[#c06c84] to-[#c06c84] text-white w-full py-16 lg:py-24 relative overflow-hidden'>
       <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
         <div className='flex flex-col lg:flex-row gap-8 lg:gap-12 items-center'>
           

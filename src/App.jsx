@@ -8,6 +8,7 @@ import SignUp from './components/main/SignUp'
 import Login from './components/main/Login'
 import Mg from './components/main/Mg'
 import Aktu from './components/main/Aktu'
+import StudyFooter from './components/footer/StudyFooter'
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
           <Route path='/aktu-university' element={<Aktu/>}/>
         </Routes>
       </div>
+      <StudyFooter/>
     </div>
   )
 }
