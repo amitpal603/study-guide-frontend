@@ -13,6 +13,7 @@ import Policy from './components/main/Policy'
 import TermAndCondition from './components/main/TermAndCondition'
 import Support from './components/main/Support'
 import Review from './components/main/Review'
+import ForgetPassword from './components/main/ForgetPassword'
 
 function App() {
   return (
@@ -31,6 +32,7 @@ function App() {
           <Route path='/terms-conditions' element={<TermAndCondition/>}/>
           <Route path='/support' element={<Support/>}/>
           <Route path='/reviews' element={<Review/>}/>
+          <Route path='/forget-password' element={<ForgetPassword/>}/>
         </Routes>
       </div>
       <StudyFooter/>

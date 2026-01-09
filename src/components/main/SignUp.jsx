@@ -24,7 +24,7 @@ function SignUp() {
 
             <div className='flex flex-col'>
               <label htmlFor="email" className='text-gray-700 font-semibold mb-2 text-sm'>
-                Email
+                Email or Phone
               </label>
               <input 
                 id="email"
@@ -99,7 +99,7 @@ function SignUp() {
 
           <p className='text-center text-gray-600 text-sm mt-6'>
             Already have an account? 
-            <Link to="/login" className='text-[#f67280] font-semibold ml-1 cursor-pointer hover:underline'>
+            <Link to="/login-account" className='text-[#f67280] font-semibold ml-1 cursor-pointer hover:underline'>
               Login
             </Link>
           </p>
