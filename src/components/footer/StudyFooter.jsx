@@ -11,13 +11,13 @@ function StudyFooter() {
         {name : "Twitter" , icon : <FaSquareXTwitter/> , link : "#"}
     ]
     const legalInfo = [
-        {name : "24/7 support" , link : "#"},
-        {name : "Policy" , link : "#"},
-        {name : "Terms and Conditions" , link : "#"}
+        {name : "24/7 support" , link : "/support"},
+        {name : "Policy" , link : "/policy"},
+        {name : "Terms and Conditions" , link : "/terms-conditions"}
     ]
     const pages = [
-        {name : "Help" , link : "#"},
-        {name : "Review & feedback" , link : "#"}
+        {name : "Help" , link : "/help"},
+        {name : "Review & feedback" , link : "/reviews"}
     ]
     
   return (
