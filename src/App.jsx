@@ -17,6 +17,7 @@ import ForgetPassword from "./components/main/ForgetPassword";
 import AdminSignUp from "./components/main/admin/AdminSignUp";
 import NotFound from "./components/main/NotFound";
 import AdminDashboard from "./components/main/admin/AdminDashboard";
+import AdminSignIn from "./components/main/admin/AdminSignIn";
 
 function App() {
   return (
@@ -42,7 +43,7 @@ function App() {
           <Route path="/forget-password" element={<ForgetPassword />} />
           <Route path="/admin-sign-up-study-guide" element={<AdminSignUp/>}/>
           <Route path="*" element={<NotFound/>}/>
-          <Route path="/admin-sign-in-study-guide"/>
+          <Route path="/admin-sign-in-study-guide" element={<AdminSignIn/>}/>
           <Route path="/admin/study-guide/dashboard" element={<AdminDashboard/>}/>
         </Routes>
       </div>
