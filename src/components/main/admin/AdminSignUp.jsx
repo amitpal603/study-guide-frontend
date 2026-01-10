@@ -1,15 +1,16 @@
 import React, { useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 
 function AdminSignUp() {
   const [isAdmin , setIsAdmin] = useState("")
   const [secret , setSecret] = useState("")
-
+  const navigate = useNavigate()
   const handleSubmit = (e) => {
     e.preventDefault()
     if(isAdmin === "admin" && secret !== "studyGuide") {
       alert("invalid admin")
     }
-    alert("valid admin")
+    navigate("/admin/study-guide/dashboard")
     
   }
   return (
@@ -160,9 +161,11 @@ function AdminSignUp() {
           <div className='mt-6 text-center'>
             <p className='text-sm text-gray-500'>
               Already have an account? 
-              <a href='#' className='text-pink-500 font-semibold hover:text-pink-600 ml-1 transition-colors hover:underline'>
+              <span  className='text-pink-500 font-semibold hover:text-pink-600 ml-1 transition-colors hover:underline'>
+                <Link to="/admin-sign-in-study-guide">
                 Sign In
-              </a>
+                </Link>
+              </span>
             </p>
           </div>
         </div>
