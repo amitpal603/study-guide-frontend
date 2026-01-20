@@ -259,7 +259,7 @@ function Navbar() {
               <NavLink
                 to="/login-account"
                 onClick={() => setIsOpen(false)}
-                className="block w-full text-left bg-white text-[#F67280] font-semibold text-base py-3 px-4 rounded-lg hover:bg-gray-50 hover:shadow-md transition-all duration-200 active:scale-95"
+                className="block w-full text-left  text-white font-semibold text-base py-3 px-4 rounded-lg hover:bg-gray-50 hover:shadow-md transition-all duration-200 active:scale-95"
               >
                 Login
               </NavLink>

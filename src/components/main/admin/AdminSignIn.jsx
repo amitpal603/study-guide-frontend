@@ -111,7 +111,7 @@ function AdminSignIn() {
               className='w-full bg-gradient-to-r from-pink-500 to-rose-500 text-white font-bold py-4 rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 hover:from-pink-600 hover:to-rose-600 mt-6 active:scale-95'
             >
               <span className='flex items-center justify-center gap-2'>
-                Sign Up
+                Sign In
                 <svg className='w-5 h-5' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
                   <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M13 7l5 5m0 0l-5 5m5-5H6' />
                 </svg>
