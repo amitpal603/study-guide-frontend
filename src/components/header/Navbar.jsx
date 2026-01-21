@@ -5,7 +5,7 @@ import study from "/src/assets/study.jpg";
 function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
-
+  const [isAdmin , setIsAdmin] = useState(true)
   const links = [
     { to: "/", label: "Home" },
     { to: "/about", label: "About" },
@@ -69,6 +69,23 @@ function Navbar() {
                   </NavLink>
                 </li>
               ))}
+              {
+                isAdmin && (
+                  <li>
+                    <NavLink to="/admin/study-guide/dashboard"
+                    className={({ isActive }) =>
+                      `text-white font-medium text-base lg:text-lg transition-all duration-200 hover:text-gray-100 px-3 lg:px-4 py-2 rounded-md whitespace-nowrap ${
+                        isActive
+                          ? "bg-[#e55d6d] shadow-lg font-bold"
+                          : "hover:bg-[#e55d6d] hover:bg-opacity-50 hover:shadow-md"
+                      }`
+                    }
+                    >
+                      Admin Dashboard
+                    </NavLink>
+                  </li>
+                )
+              }
             </ul>
 
             {/* University Dropdown - Desktop */}
@@ -215,6 +232,23 @@ function Navbar() {
                 </NavLink>
               </li>
             ))}
+             {
+                isAdmin && (
+                  <li>
+                    <NavLink to="/admin/study-guide/dashboard"
+                    className={({ isActive }) =>
+                      `text-white font-medium text-base lg:text-lg transition-all duration-200 hover:text-gray-100 px-3 lg:px-4 py-2 rounded-md whitespace-nowrap ${
+                        isActive
+                          ? "bg-[#e55d6d] shadow-lg font-bold"
+                          : "hover:bg-[#e55d6d] hover:bg-opacity-50 hover:shadow-md"
+                      }`
+                    }
+                    >
+                      Admin Dashboard
+                    </NavLink>
+                  </li>
+                )
+              }
           </ul>
 
           {/* University Section - Mobile */}

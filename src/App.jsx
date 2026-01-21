@@ -44,7 +44,7 @@ function App() {
           <Route path="/admin-sign-up-study-guide" element={<AdminSignUp/>}/>
           <Route path="*" element={<NotFound/>}/>
           <Route path="/admin-sign-in-study-guide" element={<AdminSignIn/>}/>
-          <Route path="/admin/study-guide/dashboard" element={<AdminDashboard/>}/>
+          <Route path="/admin/study-guide/dashboard" element={<AdminDashboard/>}/>  
         </Routes>
       </div>
       <StudyFooter />
