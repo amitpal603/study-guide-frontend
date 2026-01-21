@@ -237,12 +237,12 @@ function Navbar() {
                   <li>
                     <NavLink to="/admin/study-guide/dashboard"
                     className={({ isActive }) =>
-                      `text-white font-medium text-base lg:text-lg transition-all duration-200 hover:text-gray-100 px-3 lg:px-4 py-2 rounded-md whitespace-nowrap ${
-                        isActive
-                          ? "bg-[#e55d6d] shadow-lg font-bold"
-                          : "hover:bg-[#e55d6d] hover:bg-opacity-50 hover:shadow-md"
-                      }`
-                    }
+                    `block text-white font-medium text-base py-3 px-4 rounded-lg transition-all duration-200 ${
+                      isActive
+                        ? "bg-[#e55d6d] shadow-md scale-[1.02]"
+                        : "hover:bg-[#e55d6d] hover:bg-opacity-70 hover:pl-6 active:scale-95"
+                    }`
+                  }
                     >
                       Admin Dashboard
                     </NavLink>
