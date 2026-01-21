@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import UploadContent from './material/UploadContent'
 
 function AdminDashboard() {
   const [activeMenu, setActiveMenu] = useState(1)
@@ -143,40 +144,7 @@ function AdminDashboard() {
         {/* Content Area Based on Active Menu */}
         <div className='bg-white rounded-2xl shadow-lg p-8 animate-fadeIn'>
           {activeMenu === 1 && (
-            <div>
-              <h2 className='text-2xl font-bold text-gray-800 mb-6 flex items-center gap-3'>
-                <span className='text-3xl animate-bounce'>📝</span>
-                Add New Content
-              </h2>
-              <div className='space-y-6'>
-                <div className='transform hover:scale-105 transition-transform duration-200'>
-                  <label className='block text-sm font-medium text-gray-700 mb-2'>
-                    Content Title
-                  </label>
-                  <input
-                    type='text'
-                    placeholder='Enter content title...'
-                    className='w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-rose-500 focus:outline-none transition-colors duration-300'
-                  />
-                </div>
-                <div className='transform hover:scale-105 transition-transform duration-200'>
-                  <label className='block text-sm font-medium text-gray-700 mb-2'>
-                    Description
-                  </label>
-                  <textarea
-                    rows={4}
-                    placeholder='Enter description...'
-                    className='w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-rose-500 focus:outline-none transition-colors duration-300'
-                  ></textarea>
-                </div>
-                <button
-                  onClick={handleSubmit}
-                  className='bg-gradient-to-r from-rose-500 to-pink-500 text-white px-8 py-3 rounded-xl font-medium hover:shadow-lg hover:shadow-rose-500/50 transition-all duration-300 hover:scale-105'
-                >
-                  Add Content ✨
-                </button>
-              </div>
-            </div>
+            <UploadContent/>
           )}
 
           {activeMenu === 2 && (
