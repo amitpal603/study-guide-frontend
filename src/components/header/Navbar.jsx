@@ -234,7 +234,7 @@ function Navbar() {
             ))}
              {
                 isAdmin && (
-                  <li>
+                  <li onClick={() => setIsOpen(false)}>
                     <NavLink to="/admin/study-guide/dashboard"
                     className={({ isActive }) =>
                     `block text-white font-medium text-base py-3 px-4 rounded-lg transition-all duration-200 ${
