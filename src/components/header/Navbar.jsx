@@ -115,7 +115,7 @@ function Navbar() {
                 }}
               >
                 <option value="Account">Account</option>
-                {isAdmin ? "" :  <option value="Sign Up">Sign Up</option>}
+                
                 <option value="Login">Login</option>
               </select>
             </div>
