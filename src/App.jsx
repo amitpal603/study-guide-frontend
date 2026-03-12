@@ -14,7 +14,6 @@ import TermAndCondition from "./components/main/TermAndCondition";
 import Support from "./components/main/Support";
 import Review from "./components/main/Review";
 import ForgetPassword from "./components/main/ForgetPassword";
-import AdminSignUp from "./components/main/admin/AdminSignUp";
 import NotFound from "./components/main/NotFound";
 import AdminDashboard from "./components/main/admin/AdminDashboard";
 import AdminSignIn from "./components/main/admin/AdminSignIn";
@@ -41,7 +40,6 @@ function App() {
           <Route path="/support" element={<Support />} />
           <Route path="/reviews" element={<Review />} />
           <Route path="/forget-password" element={<ForgetPassword />} />
-          <Route path="/admin-sign-up-study-guide" element={<AdminSignUp/>}/>
           <Route path="*" element={<NotFound/>}/>
           <Route path="/admin-sign-in-study-guide" element={<AdminSignIn/>}/>
           <Route path="/admin/study-guide/dashboard" element={<AdminDashboard/>}/>  

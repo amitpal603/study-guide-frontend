@@ -115,7 +115,7 @@ function Navbar() {
                 }}
               >
                 <option value="Account">Account</option>
-                <option value="Sign Up">Sign Up</option>
+                {isAdmin ? "" :  <option value="Sign Up">Sign Up</option>}
                 <option value="Login">Login</option>
               </select>
             </div>
@@ -282,13 +282,6 @@ function Navbar() {
                 className="block w-full text-left text-white font-medium text-base py-3 px-4 rounded-lg hover:bg-[#e55d6d] hover:bg-opacity-70 transition-all duration-200 active:scale-95"
               >
                 My Account
-              </NavLink>
-              <NavLink
-                to="/sign-up"
-                onClick={() => setIsOpen(false)}
-                className="block w-full text-left text-white font-medium text-base py-3 px-4 rounded-lg hover:bg-[#e55d6d] hover:bg-opacity-70 transition-all duration-200 active:scale-95"
-              >
-                Sign Up
               </NavLink>
               <NavLink
                 to="/login-account"
