@@ -1,21 +1,31 @@
-import React from 'react'
+import React, { useContext } from 'react'
+import { useForm } from 'react-hook-form'
 import { Link } from 'react-router-dom'
+import { userAuth } from '../../context/studyGuide'
 
 function Login() {
+  const {register , handleSubmit , reset} = useForm()
+  const {loginUser} = useContext(userAuth)
+
+  const HandleLoginUser = (data) => {
+     loginUser(data)
+     reset()
+  }
   return (
     <div className='min-h-screen w-full bg-gradient-to-br from-[#f67280] via-[#f8939b] to-[#f67280] flex items-center justify-center p-6'>
       <div className='bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md mt-20'>
         <h1 className='text-4xl font-bold text-[#f67280] text-center mb-8'>Login</h1>
         
-        <div className='space-y-5'>
+        <form onSubmit={handleSubmit(HandleLoginUser)} className='space-y-5'>
           <div className='flex flex-col'>
             <label htmlFor="email" className='text-gray-700 font-semibold mb-2 text-sm'>
-              Email or Phone
+              Email
             </label>
             <input 
               id="email"
-              type="text" 
-              placeholder='Email or Phone no' 
+              type="email"
+              {...register("email" , {required : true})} 
+              placeholder='Example@gmail.com' 
               className='px-4 py-3 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-[#f67280] focus:ring-2 focus:ring-[#f67280]/20 transition-all text-gray-700 placeholder-gray-400'
             />
           </div>
@@ -26,7 +36,8 @@ function Login() {
             </label>
             <input 
               id="password"
-              type="password" 
+              type="password"
+              {...register("password" , {required : true})} 
               placeholder='Password' 
               className='px-4 py-3 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-[#f67280] focus:ring-2 focus:ring-[#f67280]/20 transition-all text-gray-700 placeholder-gray-400'
             />
@@ -45,7 +56,7 @@ function Login() {
           </div>
 
           <button 
-            type="button"
+            type="submit"
             className='active:scale-95 w-full bg-[#f67280] hover:bg-[#f5586e] text-white font-bold py-3.5 px-6 rounded-lg transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 mt-6'
           >
             Login
@@ -59,7 +70,7 @@ function Login() {
               </Link>
             </span>
           </p>
-        </div>
+        </form>
       </div>
     </div>
   )
