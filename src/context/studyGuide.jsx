@@ -58,8 +58,26 @@ const loginUser = async (data) => {
     setLoading(false)
    }
 }
+
+// ? logout user handler
+
+const logoutHandler = async () => {
+  try {
+    const res = await axios.post("http://localhost:3000/api/auth/user/logout")
+
+    if(res.status == 200) {
+      localStorage.clear("token")
+      localStorage.clear("role")
+      toast.success(res.data?.data?.message || "Logout Successfully...")
+    }
+  } catch (error) {
+    const message = error.response?.data?.data?.message || "Logout failed"
+     toast.error(message)
+  }
+
+}
  const store = {
-    register , handleSubmit , registerUser , loginUser, loading,role
+    register , handleSubmit , registerUser , loginUser, loading,role,logoutHandler
   }
   return <userAuth.Provider value={store}>{children}</userAuth.Provider>
 }
