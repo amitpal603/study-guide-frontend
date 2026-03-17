@@ -5,7 +5,7 @@ import toast from 'react-hot-toast'
 import { useNavigate } from 'react-router-dom'
 export const userAuth = createContext()
 function StudyGuide({children}) {
- const [user , setUser] = useState([{}])
+
  const [loading , setLoading] = useState(false)
  const {register , handleSubmit , reset} = useForm()
  const navigate = useNavigate()
@@ -44,18 +44,21 @@ const loginUser = async (data) => {
 
     const res = await axios.post("http://localhost:3000/api/auth/user/login" , data)
     if(res?.status == 200) {
-      toast.success(res?.data?.message || "Login Successfully...")
+      toast.success(res?.data?.data?.message || "Login Successfully...")
+      const {token , role} = res?.data?.data
+      localStorage.setItem("token" , token)
+      localStorage.setItem("role" , role)
       navigate("/")
     }
    } catch (error) {
-     const message = error.response?.data?.message || "Login failed"
+     const message = error.response?.data?.data?.message || "Login failed"
      toast.error(message)
    } finally {
     setLoading(false)
    }
 }
  const store = {
-    register , handleSubmit , registerUser , loginUser
+    register , handleSubmit , registerUser , loginUser, loading
   }
   return <userAuth.Provider value={store}>{children}</userAuth.Provider>
 }
