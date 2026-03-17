@@ -9,6 +9,7 @@ function StudyGuide({children}) {
  const [loading , setLoading] = useState(false)
  const {register , handleSubmit , reset} = useForm()
  const navigate = useNavigate()
+ const role = localStorage.getItem("role")
 
  //! user register handler
  const registerUser = async (data) => {
@@ -58,7 +59,7 @@ const loginUser = async (data) => {
    }
 }
  const store = {
-    register , handleSubmit , registerUser , loginUser, loading
+    register , handleSubmit , registerUser , loginUser, loading,role
   }
   return <userAuth.Provider value={store}>{children}</userAuth.Provider>
 }
