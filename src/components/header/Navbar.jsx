@@ -5,7 +5,7 @@ import study from "/src/assets/study.jpg";
 function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
-  const [isAdmin , setIsAdmin] = useState(true)
+  const [isAdmin , setIsAdmin] = useState(false)
   const links = [
     { to: "/", label: "Home" },
     { to: "/about", label: "About" },
