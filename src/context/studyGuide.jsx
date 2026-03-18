@@ -9,7 +9,7 @@ function StudyGuide({children}) {
  const [loading , setLoading] = useState(false)
  const {register , handleSubmit , reset} = useForm()
  const navigate = useNavigate()
- const role = localStorage.getItem("role")
+ const role = sessionStorage.getItem("role")
 
  //! user register handler
  const registerUser = async (data) => {
@@ -47,8 +47,8 @@ const loginUser = async (data) => {
     if(res?.status == 200) {
       toast.success(res?.data?.data?.message || "Login Successfully...")
       const {token , role} = res?.data?.data
-      localStorage.setItem("token" , token)
-      localStorage.setItem("role" , role)
+      sessionStorage.setItem("token" , token)
+      sessionStorage.setItem("role" , role)
       navigate("/")
     }
    } catch (error) {

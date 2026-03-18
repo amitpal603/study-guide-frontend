@@ -43,7 +43,7 @@ function App() {
           <Route path="/forget-password" element={<ForgetPassword />} />
           <Route path="*" element={<NotFound/>}/>
           <Route path="/admin-sign-in-study-guide" element={<AdminSignIn/>}/>
-          <Route path="/admin/study-guide/dashboard" element={<AdminDashboard/>}/>  
+          <Route path="/admin/study-guide/dashboard" element={<ProtectedRoutes><AdminDashboard/></ProtectedRoutes>}/>  
         </Routes>
       </div>
       <StudyFooter />
