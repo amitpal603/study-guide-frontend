@@ -1,22 +1,27 @@
-import React, { useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
+import React, { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
-function ProtectedRoutes({children}) {
-    const token = sessionStorage.getItem("token")
-    const role = sessionStorage.getItem("role")
-    const navigate = useNavigate()
+function ProtectedRoutes({ children }) {
+  const navigate = useNavigate();
 
-    useEffect(() => {
-        if(!token && role === "USER") {
-        navigate("/login-account")
+  const token = sessionStorage.getItem("token");
+  const role = sessionStorage.getItem("role");
+
+  useEffect(() => {
+
+    if (!token) {
+
+      if (role === "ADMIN") {
+        navigate("/admin-sign-in-study-guide");
+      } else {
+        navigate("/login-account");
+      }
+
     }
-    else if(!token && role === "ADMIN") {
-      navigate("/admin-sign-in-study-guide")
-    }
-    },[token])
-  return (
-    children
-  )
+
+  }, [token, role, navigate]);
+
+  return children;
 }
 
-export default ProtectedRoutes
+export default ProtectedRoutes;

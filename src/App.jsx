@@ -1,4 +1,3 @@
-import React, { lazy, Suspense } from "react";
 import Navbar from "./components/header/Navbar";
 import { Route, Routes } from "react-router-dom";
 import Home from "./components/main/Home";

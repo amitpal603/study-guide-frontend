@@ -66,8 +66,8 @@ const logoutHandler = async () => {
     const res = await axios.post("http://localhost:3000/api/auth/user/logout")
 
     if(res.status == 200) {
-      localStorage.clear("token")
-      localStorage.clear("role")
+      sessionStorage.removeItem("token")
+      sessionStorage.removeItem("role")
       toast.success(res.data?.data?.message || "Logout Successfully...")
     }
   } catch (error) {
