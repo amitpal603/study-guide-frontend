@@ -2,10 +2,11 @@ import React, { useContext } from 'react'
 import { useForm } from 'react-hook-form'
 import { Link } from 'react-router-dom'
 import { userAuth } from '../../context/studyGuide'
+import Loader from './common/Loader'
 
 function Login() {
   const {register , handleSubmit , reset} = useForm()
-  const {loginUser} = useContext(userAuth)
+  const {loginUser , loading} = useContext(userAuth)
 
   const HandleLoginUser = (data) => {
      loginUser(data)
@@ -59,7 +60,7 @@ function Login() {
             type="submit"
             className='active:scale-95 w-full bg-[#f67280] hover:bg-[#f5586e] text-white font-bold py-3.5 px-6 rounded-lg transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 mt-6'
           >
-            Login
+            {loading ? <Loader/> : "Login"}
           </button>
 
           <p className='text-center text-gray-600 text-sm mt-6'>

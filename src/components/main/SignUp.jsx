@@ -1,10 +1,11 @@
 import React, { useContext } from 'react'
 import { Link } from 'react-router-dom'
 import { userAuth } from '../../context/studyGuide'
+import Loader from './common/Loader'
 
 function SignUp() {
 
-  const { register, handleSubmit, registerUser } = useContext(userAuth)
+  const { register, handleSubmit, registerUser , loading } = useContext(userAuth)
 
   const HandleRegisterData = async (data) => {
     try {
@@ -36,7 +37,7 @@ function SignUp() {
 
               <input
                 type="text"
-                placeholder='John Doe'
+                placeholder='Enter Fullname'
                 {...register("username", { required: true })}
                 className='px-4 py-3 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-[#f67280]'
               />
@@ -49,7 +50,7 @@ function SignUp() {
 
               <input
                 type="email"
-                placeholder='example@gmail.com'
+                placeholder='Enter Your Email'
                 {...register("email", { required: true })}
                 className='px-4 py-3 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-[#f67280]'
               />
@@ -127,7 +128,7 @@ function SignUp() {
             type="submit"
             className='active:scale-95 w-full bg-[#f67280] hover:bg-[#f5586e] text-white font-bold py-3.5 rounded-lg mt-6'
           >
-            Sign Up
+            {loading ? <Loader/> : "Sing Up"}
           </button>
 
           <p className='text-center text-gray-600 text-sm mt-6'>

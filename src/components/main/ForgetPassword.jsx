@@ -1,6 +1,7 @@
 import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import Loader from "./common/Loader";
 
 export default function ForgotPassword() {
   const [email, setEmail] = useState("");
@@ -125,7 +126,7 @@ export default function ForgotPassword() {
                   disabled={loading}  // ✅ FIX 9: Disable button while loading
                   className="w-full bg-amber-600 text-stone-950 font-body text-sm tracking-[0.15em] uppercase py-4 btn-hover hover:bg-amber-500 disabled:opacity-60 disabled:cursor-not-allowed disabled:transform-none"
                 >
-                  {loading ? "Sending..." : "Send Reset Link"}  {/* ✅ FIX 10: Loading feedback */}
+                  {loading ? <Loader/> : "Send Reset Link"}  {/* ✅ FIX 10: Loading feedback */}
                 </button>
               </form>
 

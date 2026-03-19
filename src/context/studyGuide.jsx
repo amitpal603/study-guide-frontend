@@ -14,7 +14,7 @@ function StudyGuide({children}) {
  //! user register handler
  const registerUser = async (data) => {
   try {
-
+      setLoading(true)
     const response = await axios.post(
       "http://localhost:3000/api/auth/user/register",
       data
@@ -34,6 +34,8 @@ function StudyGuide({children}) {
       error.response?.data?.message || "Registration failed"
 
     toast.error(message)
+  }finally {
+    setLoading(false)
   }
 }
 

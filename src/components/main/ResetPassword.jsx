@@ -1,6 +1,7 @@
 import { useState } from "react";
 import axios from "axios";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
+import Loader from "./common/Loader";
 
 export default function ResetPassword() {
   const [newPassword, setNewPassword] = useState("");
@@ -249,7 +250,7 @@ export default function ResetPassword() {
                   disabled={loading || passwordsMismatch}
                   className="w-full bg-amber-600 text-stone-950 font-body text-sm tracking-[0.15em] uppercase py-4 btn-hover hover:bg-amber-500 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
                 >
-                  {loading ? "Resetting…" : "Reset Password"}
+                  {loading ? <Loader/> : "Reset Password"}
                 </button>
               </form>
 
