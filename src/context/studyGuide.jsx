@@ -10,6 +10,8 @@ function StudyGuide({ children }) {
   const [loading, setLoading] = useState(false);
   const { register, handleSubmit, reset } = useForm();
   const [user , setUser] = useState([])
+  const [data , setData] = useState([])
+  const [url , setUrl] = useState("")
   const navigate = useNavigate();
 
  
@@ -111,12 +113,35 @@ function StudyGuide({ children }) {
 
     const message = res?.data?.message || "Upload PDF Successfully";
     toast.success(message);
+    contentPdfData()
 
   } catch (error) {
     console.error(error);
     toast.error(error?.response?.data?.message || "Upload failed");
   }
 };
+
+const contentPdfData = async () => {
+  try {
+    if(!token) return
+
+    const res = await axios.get(`${API}/api/auth/user/get/pdf` , {
+      headers : {
+        Authorization : `Bearer ${token}`
+      }
+    })
+    if(res.status == 200) {
+      setData(res.data.data || [])
+    }
+  } catch (error) {
+    console.log(error)
+  }
+}
+useEffect(() => {
+  if(token) {
+    contentPdfData()
+  }
+},[])
  useEffect(() => {
   if(token) {
     getUser()
@@ -132,7 +157,10 @@ function StudyGuide({ children }) {
     role,
     logoutHandler,
     user,
-    uploadContent
+    uploadContent,
+    data,
+    url,
+    setUrl
     
   };
 

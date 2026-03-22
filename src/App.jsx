@@ -21,6 +21,7 @@ import AdminDashboard from "./components/main/admin/AdminDashboard";
 import AdminSignIn from "./components/main/admin/AdminSignIn";
 
 import ProtectedRoutes from "./components/protect/ProtectedRoutes";
+import ShowContent from "./components/main/admin/material/ShowContent";
 
 function App() {
   return (
@@ -83,7 +84,12 @@ function App() {
             </ProtectedRoutes>
           }
         />
-
+          <Route
+          path="/content-data-pdf"
+          element={<ProtectedRoutes>
+            <ShowContent/>
+          </ProtectedRoutes>}
+          />
         {/* 404 */}
         <Route path="*" element={<NotFound />} />
 

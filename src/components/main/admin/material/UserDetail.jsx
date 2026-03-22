@@ -4,12 +4,7 @@ import { userAuth } from '../../../../context/StudyGuide'
 
 function UserDetail() {
   const {user} = useContext(userAuth)
-  const [users, setUsers] = useState([
-    { id: 1, name: 'John Doe', email: 'john.doe@example.com', role: 'Student', status: 'Active' },
-    { id: 2, name: 'Jane Smith', email: 'jane.smith@example.com', role: 'Teacher', status: 'Active' },
-    { id: 3, name: 'Mike Johnson', email: 'mike.j@example.com', role: 'Student', status: 'Inactive' },
-    { id: 4, name: 'Sarah Williams', email: 'sarah.w@example.com', role: 'Admin', status: 'Active' },
-  ])
+ 
 
   const [searchQuery, setSearchQuery] = useState('')
   const [selectedUser, setSelectedUser] = useState(null)
@@ -107,7 +102,7 @@ function UserDetail() {
                   </button>
                   <button
                         
-                    className='  hover:cursor-pointer active:scale-95 flex-1 sm:flex-none bg-gradient-to-r from-red-500 to-rose-600 text-white px-4 md:px-6 py-2 md:py-2.5 rounded-lg md:rounded-xl hover:shadow-lg transition-all duration-300 hover:scale-105 text-sm md:text-base font-medium'
+                    className='   hover:cursor-pointer active:scale-95 flex-1 sm:flex-none bg-gradient-to-r from-red-500 to-rose-600 text-white px-4 md:px-6 py-2 md:py-2.5 rounded-lg md:rounded-xl hover:shadow-lg transition-all duration-300 hover:scale-105 text-sm md:text-base font-medium'
                   >
                     <span className='hidden sm:inline'>Delete</span>
                     <span className='sm:hidden'> Delete</span>
