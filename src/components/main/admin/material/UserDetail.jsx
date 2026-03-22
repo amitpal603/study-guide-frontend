@@ -1,6 +1,7 @@
 import React, { useContext, useState } from 'react'
 import UserCart from './UserCart'
 import { userAuth } from '../../../../context/StudyGuide'
+import UserDel from './UserDel'
 
 function UserDetail() {
   const {user} = useContext(userAuth)
@@ -9,6 +10,8 @@ function UserDetail() {
   const [searchQuery, setSearchQuery] = useState('')
   const [selectedUser, setSelectedUser] = useState(null)
   const [isOpen , setIsOpen] = useState(false)
+  const [isDel , setIsDel] = useState(false)
+  const [select , setSelect] = useState("")
 
   
 
@@ -101,8 +104,12 @@ function UserDetail() {
                     <span className='sm:hidden'>View</span>
                   </button>
                   <button
-                        
-                    className='   hover:cursor-pointer active:scale-95 flex-1 sm:flex-none bg-gradient-to-r from-red-500 to-rose-600 text-white px-4 md:px-6 py-2 md:py-2.5 rounded-lg md:rounded-xl hover:shadow-lg transition-all duration-300 hover:scale-105 text-sm md:text-base font-medium'
+                       onClick={() => {
+                        setIsDel(true)
+                        setSelect(user._id)
+                       }}
+                       disabled={user?.role == "ADMIN"}
+                    className=' disabled:cursor-not-allowed hover:cursor-pointer active:scale-95 flex-1 sm:flex-none bg-gradient-to-r from-red-500 to-rose-600 text-white px-4 md:px-6 py-2 md:py-2.5 rounded-lg md:rounded-xl hover:shadow-lg transition-all duration-300 hover:scale-105 text-sm md:text-base font-medium'
                   >
                     <span className='hidden sm:inline'>Delete</span>
                     <span className='sm:hidden'> Delete</span>
@@ -163,6 +170,7 @@ function UserDetail() {
         }
       `}</style>
       <UserCart isOpen={isOpen} setIsOpen={setIsOpen} user={selectedUser}/>
+      <UserDel isOpen={isDel} setIsOpen={setIsDel} del={select}/>
     </div>
   )
 }

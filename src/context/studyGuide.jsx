@@ -35,6 +35,7 @@ function StudyGuide({ children }) {
         toast.success(response.data.message || "User registered");
         reset();
         navigate("/login-account");
+        
       }
     } catch (error) {
       toast.error(error.response?.data?.message || "Registration failed");
@@ -137,6 +138,26 @@ const contentPdfData = async () => {
     console.log(error)
   }
 }
+
+const deleteUserHandler = async (delId) => {
+  try {
+    if(!token) return
+
+    const res = await axios.delete(`${API}/api/auth/user/delete/${delId}` , {
+      headers : {
+        Authorization : `Bearer ${token}`
+      }
+    })
+
+    if(res.status == 200) {
+      toast.success(res.data?.message || "User Deleted")
+      getUser()
+    }
+  } catch (error) {
+    console.error(error);
+    toast.error(error?.response?.data?.message || "Delete failed");
+  }
+}
 useEffect(() => {
   if(token) {
     contentPdfData()
@@ -160,7 +181,8 @@ useEffect(() => {
     uploadContent,
     data,
     url,
-    setUrl
+    setUrl,
+    deleteUserHandler
     
   };
 

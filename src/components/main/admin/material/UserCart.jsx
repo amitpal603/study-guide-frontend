@@ -27,17 +27,17 @@ function UserCart({ isOpen, setIsOpen, user }) {
         {/* Content */}
         <div className="mt-4 space-y-3">
           <h2 className="text-lg font-semibold text-gray-700">
-            {user.username}
+            {user?.username}
           </h2>
 
           <p className="text-gray-600">
-            📧 {user.email}
+            📧 {user?.email}
           </p>
 
           <p className="text-gray-600">
             💼 Role:{" "}
             <span className="font-semibold text-gray-800">
-              {user.role}
+              {user?.role}
             </span>
           </p>
         </div>
