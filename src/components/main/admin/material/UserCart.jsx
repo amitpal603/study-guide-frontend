@@ -27,7 +27,7 @@ function UserCart({ isOpen, setIsOpen, user }) {
         {/* Content */}
         <div className="mt-4 space-y-3">
           <h2 className="text-lg font-semibold text-gray-700">
-            {user.name}
+            {user.username}
           </h2>
 
           <p className="text-gray-600">

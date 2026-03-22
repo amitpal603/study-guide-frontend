@@ -1,12 +1,15 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import UploadContent from './material/UploadContent'
 import UserDetail from './material/UserDetail'
+import { userAuth } from '../../../context/StudyGuide'
 
 function AdminDashboard() {
+  const {user} = useContext(userAuth)
   const [activeMenu, setActiveMenu] = useState(1)
   const [isSidebarOpen, setIsSidebarOpen] = useState(true)
   const [isMobile, setIsMobile] = useState(false)
 
+  
   // Detect screen size
   useEffect(() => {
     const handleResize = () => {
@@ -31,12 +34,7 @@ function AdminDashboard() {
     { id: 3, title: "All Material", path: "/material-details", icon: "📚" }
   ]
 
-  const stats = [
-    { label: "Total Users", value: "1,234", change: "+12%", icon: "👤" },
-    { label: "Total Content", value: "567", change: "+8%", icon: "📄" },
-    { label: "Active Sessions", value: "89", change: "+23%", icon: "⚡" },
-    { label: "New This Week", value: "45", change: "+15%", icon: "🆕" }
-  ]
+  
 
   const handleMenuClick = (menuId) => {
     setActiveMenu(menuId)
@@ -127,19 +125,23 @@ function AdminDashboard() {
         </nav>
 
         {/* Sidebar Footer */}
-        <div className='absolute bottom-0 left-0 right-0 p-3 sm:p-4 border-t'>
+        {
+          user?.map((user) => (
+            <div className='absolute bottom-0 left-0 right-0 p-3 sm:p-4 border-t'>
           <div className='flex items-center gap-3 px-2'>
             <div className='w-10 h-10 bg-gradient-to-br from-rose-400 to-pink-500 rounded-full flex items-center justify-center text-lg'>
-              A
+              {user.role === "ADMIN" ? <p>{user.username.charAt[0]}</p> : <p>A</p>}
             </div>
             {(isSidebarOpen || isMobile) && (
               <div className='flex-1 animate-fadeIn'>
-                <p className='text-sm font-medium'>Admin User</p>
-                <p className='text-xs text-gray-300'>admin@example.com</p>
+               {user?.role === "ADMIN" ?  <p className='text-sm font-medium text-white'>{user?.username}</p> : <p></p>}
+                {user?.role === "ADMIN" ? <p className='text-xs text-gray-300'>{user?.email}</p> : <p></p>}
               </div>
             )}
           </div>
         </div>
+          ))
+        }
       </div>
 
       {/* Right Content Area */}
@@ -167,29 +169,7 @@ function AdminDashboard() {
         {/* Scrollable Content */}
         <div className='flex-1 p-3 sm:p-4 md:p-6 lg:p-8 overflow-auto'>
           {/* Stats Grid */}
-          <div className='grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-6 mb-6 md:mb-8'>
-            {stats.map((stat, index) => (
-              <div
-                key={index}
-                style={{ animationDelay: `${index * 150}ms` }}
-                className='bg-white rounded-xl md:rounded-2xl p-3 sm:p-4 md:p-6 shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 animate-slideUp group cursor-pointer'
-              >
-                <div className='flex items-start justify-between mb-2 md:mb-4'>
-                  <div className='text-2xl sm:text-3xl md:text-4xl group-hover:scale-125 transition-transform duration-300'>
-                    {stat.icon}
-                  </div>
-                  <span className='text-green-500 text-xs sm:text-sm font-semibold bg-green-50 px-2 py-0.5 sm:px-3 sm:py-1 rounded-full'>
-                    {stat.change}
-                  </span>
-                </div>
-                <h3 className='text-gray-600 text-xs sm:text-sm mb-1 sm:mb-2'>{stat.label}</h3>
-                <p className='text-xl sm:text-2xl md:text-3xl font-bold text-gray-800'>{stat.value}</p>
-                <div className='mt-2 md:mt-4 h-1 w-full bg-gray-100 rounded-full overflow-hidden'>
-                  <div className='h-full bg-gradient-to-r from-rose-400 to-pink-500 rounded-full animate-progress'></div>
-                </div>
-              </div>
-            ))}
-          </div>
+          
 
           {/* Content Area Based on Active Menu */}
           <div className='bg-white rounded-xl md:rounded-2xl shadow-lg p-4 sm:p-6 md:p-8 animate-fadeIn'>

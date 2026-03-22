@@ -2,7 +2,7 @@ import React from 'react'
 
 function Aktu() {
   return (
-    <div>
+    <div className='h-190'>
       Aktu
     </div>
   )

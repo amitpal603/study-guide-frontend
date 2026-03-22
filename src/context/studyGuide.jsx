@@ -1,87 +1,142 @@
-import React, { createContext, useState } from 'react'
-import axios from "axios"
-import {useForm} from "react-hook-form"
-import toast from 'react-hot-toast'
-import { useNavigate } from 'react-router-dom'
-export const userAuth = createContext()
-function StudyGuide({children}) {
+import React, { createContext, useEffect, useState } from "react";
+import axios from "axios";
+import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
- const [loading , setLoading] = useState(false)
- const {register , handleSubmit , reset} = useForm()
- const navigate = useNavigate()
- const role = sessionStorage.getItem("role")
+export const userAuth = createContext();
 
- //! user register handler
- const registerUser = async (data) => {
-  try {
-      setLoading(true)
-    const response = await axios.post(
-      "http://localhost:3000/api/auth/user/register",
-      data
-    )
+function StudyGuide({ children }) {
+  const [loading, setLoading] = useState(false);
+  const { register, handleSubmit, reset } = useForm();
+  const [user , setUser] = useState([])
+  const navigate = useNavigate();
 
-    if (response.status === 201) {
-      toast.success(response.data.message || "User registered successfully")
-      reset()
-      navigate("/login-account")
+ 
+  const role = sessionStorage.getItem("role");
+  const token = sessionStorage.getItem("token");
+
+  
+  const API = "http://localhost:3000"; 
+
+  //! REGISTER
+  const registerUser = async (data) => {
+    try {
+      setLoading(true);
+
+      const response = await axios.post(
+        `${API}/api/auth/user/register`,
+        data
+      );
+
+      if (response.status === 201) {
+        toast.success(response.data.message || "User registered");
+        reset();
+        navigate("/login-account");
+      }
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Registration failed");
+    } finally {
+      setLoading(false);
     }
+  };
 
-  } catch (error) {
+  //! LOGIN
+  const loginUser = async (data) => {
+    try {
+      setLoading(true);
 
-    console.error(error)
+      const res = await axios.post(`${API}/api/auth/user/login`, data);
 
-    const message =
-      error.response?.data?.message || "Registration failed"
+      if (res.status === 200) {
+        const { token, role } = res.data.data;
 
-    toast.error(message)
-  }finally {
-    setLoading(false)
-  }
-}
+        sessionStorage.setItem("token", token);
+        sessionStorage.setItem("role", role);
 
-//? user login register
-
-const loginUser = async (data) => {
-   try {
-    setLoading(true)
-
-    const res = await axios.post("http://localhost:3000/api/auth/user/login" , data)
-    if(res?.status == 200) {
-      toast.success(res?.data?.data?.message || "Login Successfully...")
-      const {token , role} = res?.data?.data
-      sessionStorage.setItem("token" , token)
-      sessionStorage.setItem("role" , role)
-      navigate("/")
+        toast.success("Login Successfully");
+        navigate("/");
+      }
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Login failed");
+    } finally {
+      setLoading(false);
     }
-   } catch (error) {
-     const message = error.response?.data?.data?.message || "Login failed"
-     toast.error(message)
-   } finally {
-    setLoading(false)
-   }
-}
+  };
 
-// ? logout user handler
+  //! LOGOUT
+  const logoutHandler = async () => {
+    try {
+      await axios.post(`${API}/api/auth/user/logout`);
 
-const logoutHandler = async () => {
+      sessionStorage.removeItem("token");
+      sessionStorage.removeItem("role");
+
+      toast.success("Logout Successfully");
+    } catch (error) {
+      toast.error("Logout failed");
+    }
+  };
+
+ const getUser = async () => {
   try {
-    const res = await axios.post("http://localhost:3000/api/auth/user/logout")
+    if(!token) return
+    const res = await axios.get(`${API}/api/auth/user/getAllUser` , {
+      headers : {
+        Authorization : `Bearer ${token}`
+      }
+    })
 
     if(res.status == 200) {
-      sessionStorage.removeItem("token")
-      sessionStorage.removeItem("role")
-      toast.success(res.data?.data?.message || "Logout Successfully...")
+      setUser(res.data.user || [])
     }
   } catch (error) {
-    const message = error.response?.data?.data?.message || "Logout failed"
-     toast.error(message)
+    console.log(error)
   }
+ }
 
-}
- const store = {
-    register , handleSubmit , registerUser , loginUser, loading,role,logoutHandler
+ const uploadContent = async (data) => {
+  try {
+    if (!token) return;
+    const res = await axios.post(
+      `${API}/api/auth/admin/upload-pdf`,
+      data,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+
+    const message = res?.data?.message || "Upload PDF Successfully";
+    toast.success(message);
+
+  } catch (error) {
+    console.error(error);
+    toast.error(error?.response?.data?.message || "Upload failed");
   }
-  return <userAuth.Provider value={store}>{children}</userAuth.Provider>
+};
+ useEffect(() => {
+  if(token) {
+    getUser()
+  }
+ },[token])
+
+  const store = {
+    register,
+    handleSubmit,
+    registerUser,
+    loginUser,
+    loading,
+    role,
+    logoutHandler,
+    user,
+    uploadContent
+    
+  };
+
+  return <userAuth.Provider value={store}>{children}</userAuth.Provider>;
 }
 
-export default StudyGuide
+export default StudyGuide;

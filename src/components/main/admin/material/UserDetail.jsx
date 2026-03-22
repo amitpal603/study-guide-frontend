@@ -1,7 +1,9 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import UserCart from './UserCart'
+import { userAuth } from '../../../../context/StudyGuide'
 
 function UserDetail() {
+  const {user} = useContext(userAuth)
   const [users, setUsers] = useState([
     { id: 1, name: 'John Doe', email: 'john.doe@example.com', role: 'Student', status: 'Active' },
     { id: 2, name: 'Jane Smith', email: 'jane.smith@example.com', role: 'Teacher', status: 'Active' },
@@ -13,18 +15,14 @@ function UserDetail() {
   const [selectedUser, setSelectedUser] = useState(null)
   const [isOpen , setIsOpen] = useState(false)
 
-  const handleDelete = (userId) => {
-    if (window.confirm('Are you sure you want to delete this user?')) {
-      setUsers(users.filter(user => user.id !== userId))
-    }
-  }
+  
 
   const handleView = (user) => {
     setSelectedUser(user)
   }
 
-  const filteredUsers = users.filter(user => 
-    user.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+  const filteredUsers = user.filter(user => 
+    user.username.toLowerCase().includes(searchQuery.toLowerCase()) ||
     user.email.toLowerCase().includes(searchQuery.toLowerCase())
   )
 
@@ -61,13 +59,7 @@ function UserDetail() {
             <div className='flex gap-3 md:gap-4 w-full md:w-auto overflow-x-auto'>
               <div className='bg-gradient-to-br from-blue-50 to-blue-100 px-4 md:px-6 py-3 rounded-lg md:rounded-xl min-w-fit'>
                 <p className='text-xs md:text-sm text-gray-600'>Total Users</p>
-                <p className='text-xl md:text-2xl font-bold text-blue-600'>{users.length}</p>
-              </div>
-              <div className='bg-gradient-to-br from-green-50 to-green-100 px-4 md:px-6 py-3 rounded-lg md:rounded-xl min-w-fit'>
-                <p className='text-xs md:text-sm text-gray-600'>Active</p>
-                <p className='text-xl md:text-2xl font-bold text-green-600'>
-                  {users.filter(u => u.status === 'Active').length}
-                </p>
+                <p className='text-xl md:text-2xl font-bold text-blue-600'>{user.length}</p>
               </div>
             </div>
           </div>
@@ -77,7 +69,7 @@ function UserDetail() {
         <div className='space-y-3 md:space-y-4'>
           {filteredUsers.map((user, index) => (
             <div
-              key={user.id}
+              key={user._id}
               style={{ animationDelay: `${index * 100}ms` }}
               className='bg-white p-4 md:p-5 lg:p-6 border-2 border-gray-100 rounded-xl md:rounded-2xl hover:border-rose-300 hover:shadow-xl transition-all duration-300 animate-slideInRight'
             >
@@ -86,20 +78,13 @@ function UserDetail() {
                 {/* User Info */}
                 <div className='flex items-center gap-3 md:gap-4 flex-1 min-w-0'>
                   <div className='w-12 h-12 md:w-14 md:h-14 lg:w-16 lg:h-16 bg-gradient-to-br from-rose-400 to-pink-500 rounded-full flex items-center justify-center text-white font-bold text-lg md:text-xl flex-shrink-0'>
-                    {user.name.charAt(0)}
+                    {user.username.charAt(0)}
                   </div>
                   <div className='flex-1 min-w-0'>
                     <div className='flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2 mb-1'>
                       <p className='font-semibold md:font-bold text-gray-800 text-base md:text-lg truncate'>
-                        {user.name}
+                        {user.username}
                       </p>
-                      <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium w-fit ${
-                        user.status === 'Active' 
-                          ? 'bg-green-100 text-green-700' 
-                          : 'bg-gray-100 text-gray-600'
-                      }`}>
-                        {user.status}
-                      </span>
                     </div>
                     <p className='text-xs md:text-sm text-gray-500 truncate'>{user.email}</p>
                     <p className='text-xs text-gray-400 mt-1'>
@@ -120,9 +105,9 @@ function UserDetail() {
                     <span className='hidden sm:inline'>View</span>
                     <span className='sm:hidden'>View</span>
                   </button>
-                  <button 
-                    onClick={() => handleDelete(user.id)}
-                    className=' hover:cursor-pointer active:scale-95 flex-1 sm:flex-none bg-gradient-to-r from-red-500 to-rose-600 text-white px-4 md:px-6 py-2 md:py-2.5 rounded-lg md:rounded-xl hover:shadow-lg transition-all duration-300 hover:scale-105 text-sm md:text-base font-medium'
+                  <button
+                        
+                    className='  hover:cursor-pointer active:scale-95 flex-1 sm:flex-none bg-gradient-to-r from-red-500 to-rose-600 text-white px-4 md:px-6 py-2 md:py-2.5 rounded-lg md:rounded-xl hover:shadow-lg transition-all duration-300 hover:scale-105 text-sm md:text-base font-medium'
                   >
                     <span className='hidden sm:inline'>Delete</span>
                     <span className='sm:hidden'> Delete</span>
