@@ -1,14 +1,15 @@
 import React, { useContext } from 'react'
 import { userAuth } from '../../../../context/StudyGuide'
-
+import Loader from "../../../../components/main/common/Loader"
 function DeleteContent({isOpen , setIsOpen , del}) {
     const { deletePdfHandler , loading} = useContext(userAuth)
     const deleteModel = document.getElementById("delete")
     if(!deleteModel || !isOpen) return null
 
-    const HandleDelete = (id) => {
+    const HandleDelete = async (id) => {
+      await deletePdfHandler(id)
         setIsOpen(false)
-        deletePdfHandler(id)
+       
     }
   return (
     <div 
@@ -50,7 +51,7 @@ function DeleteContent({isOpen , setIsOpen , del}) {
             onClick={() => HandleDelete(del)}
             className="px-4 py-2 rounded-lg bg-red-500 text-white hover:bg-red-600 transition active:scale-95 hover:rounded-full"
           >
-            Delete
+           {loading ? <Loader/> :"Delete"}
           </button>
         </div>
       </div>
