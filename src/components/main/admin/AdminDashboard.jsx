@@ -3,14 +3,17 @@ import UploadContent from "./material/UploadContent";
 import UserDetail from "./material/UserDetail";
 import { userAuth } from "../../../context/StudyGuide";
 import { useNavigate } from "react-router-dom";
+import DeleteContent from "./material/DeleteContent";
 
 function AdminDashboard() {
-  const { user, data, url, setUrl } = useContext(userAuth);
+  const { user, data, setUrl } = useContext(userAuth);
   const [activeMenu, setActiveMenu] = useState(1);
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [isMobile, setIsMobile] = useState(false);
+  const [isDel , setIsDel] = useState(false)
+  const [select , setSelect] = useState()
   const navigate = useNavigate();
-
+ 
   useEffect(() => {
     const handleResize = () => {
       const mobile = window.innerWidth < 768;
@@ -255,7 +258,13 @@ function AdminDashboard() {
                           <button className="flex-1 bg-rose-500 text-white py-2 rounded-lg hover:bg-rose-600 transition-colors duration-300 text-xs sm:text-sm">
                             Edit
                           </button>
-                          <button className="flex-1 bg-gray-200 text-gray-700 py-2 rounded-lg hover:bg-gray-300 transition-colors duration-300 text-xs sm:text-sm">
+                         <button 
+                          onClick={() => {
+                            setIsDel(true)
+                            setSelect(material?._id)
+                            
+                          }}
+                          className="flex-1 bg-gray-200 text-gray-700 py-2 rounded-lg hover:bg-gray-300 transition-colors duration-300 text-xs sm:text-sm">
                             Delete
                           </button>
                         </div>
@@ -283,6 +292,7 @@ function AdminDashboard() {
         .animate-slideInLeft { animation: slideInLeft 0.5s ease-out forwards; }
         .animate-slideUp { animation: slideUp 0.5s ease-out forwards; }
       `}</style>
+      <DeleteContent isOpen={isDel}  setIsOpen={setIsDel} del={select}/>
     </div>
   );
 }

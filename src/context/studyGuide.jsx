@@ -158,11 +158,35 @@ const deleteUserHandler = async (delId) => {
     toast.error(error?.response?.data?.message || "Delete failed");
   }
 }
+
+const deletePdfHandler = async (pdfId) => {
+  try {
+    setLoading(true)
+    if(!token) return
+
+    const res = await axios.delete(`${API}/api/auth/admin/delete-pdf/${pdfId}` , {
+      headers : {
+        Authorization : `Bearer ${token}`
+      }
+    })
+
+    const message = res.data.message || "PDF Deleted Successfully"
+
+    if(res.status === 200) {
+      toast.success(message)
+      contentPdfData()
+    }
+  } catch (error) {
+    toast.error(error?.response?.data?.message || "Delete failed")
+  }finally {
+    setLoading(false)
+  }
+}
 useEffect(() => {
   if(token) {
     contentPdfData()
   }
-},[])
+},[token])
  useEffect(() => {
   if(token) {
     getUser()
@@ -182,7 +206,8 @@ useEffect(() => {
     data,
     url,
     setUrl,
-    deleteUserHandler
+    deleteUserHandler,
+    deletePdfHandler
     
   };
 
