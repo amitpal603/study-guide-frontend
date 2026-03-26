@@ -2,7 +2,7 @@ import React, { useContext, useState } from 'react'
 import { userAuth } from '../../../../context/StudyGuide'
 
 function UploadContent() {
-  const { uploadContent } = useContext(userAuth)
+  const { uploadContent  } = useContext(userAuth)
   const [selectedFile, setSelectedFile] = useState(null)
   const [fileName, setFileName] = useState('')
   const [isUploading, setIsUploading] = useState(false)
@@ -10,7 +10,7 @@ function UploadContent() {
   const [error, setError] = useState('')
 
   // ✅ university, course, semester added to formData
-  const [formData, setFormData] = useState({
+  const [formData , setFormData] =  useState({
     title: '',
     type: '',
     subjectName: '',

@@ -4,6 +4,7 @@ import UserDetail from "./material/UserDetail";
 import { userAuth } from "../../../context/StudyGuide";
 import { useNavigate } from "react-router-dom";
 import DeleteContent from "./material/DeleteContent";
+import Query from "./material/Query";
 
 function AdminDashboard() {
   const { user, data, setUrl } = useContext(userAuth);
@@ -193,7 +194,9 @@ function AdminDashboard() {
             {activeMenu === 1 && <UploadContent />}
             {activeMenu === 2 && <UserDetail />}
 
-            {activeMenu === 3 && (
+            {activeMenu === 3 &&  (
+              <>
+              <Query/>
               <div>
                 <h2 className="text-xl sm:text-2xl font-bold text-gray-800 mb-4 sm:mb-6 flex items-center gap-2 sm:gap-3">
                   <span className="text-2xl sm:text-3xl animate-bounce">
@@ -225,19 +228,32 @@ function AdminDashboard() {
                         </p>
 
                         <p className="text-xs sm:text-sm text-gray-600 line-clamp-2">
-                          {material.description ??
+                         University name : {material?.subject?.semester_id?.course_id?.university_id?.university_name.toUpperCase() ??
                             material.materialType ??
-                            "No description available."}
+                            "No available university name."}
                         </p>
 
                         <p className="text-xs text-gray-400 truncate">
-                          Type:{" "}
+                          Course : {" "}
                           <span className="font-medium text-gray-500">
-                            {material.materialType ?? "—"}
+                            {material?.subject?.semester_id?.course_id?.course_name.toUpperCase() ?? "No available course name"}
                           </span>
                         </p>
 
-                        {material.fileUrl && (
+                          <p className="text-xs text-gray-400 truncate">
+                          Semester : {" "}
+                          <span className="font-medium text-gray-500">
+                            {material?.subject?.semester_id?.semester ?? "No available semester "}
+                          </span>
+                        </p>
+
+                        <p className="text-xs text-gray-400 truncate">
+                          Subject : {" "}
+                          <span className="font-medium text-gray-500">
+                            {material?.subject?.subjectName ?? "No available subject name"}
+                          </span>
+                        </p>
+                        {material?.fileUrl && (
                           <button
                             onClick={() => {
                               setUrl(material.fileUrl);
@@ -273,6 +289,7 @@ function AdminDashboard() {
                   </div>
                 )}
               </div>
+              </>
             )}
           </div>
         </div>

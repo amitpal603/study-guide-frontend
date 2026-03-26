@@ -99,6 +99,7 @@ function StudyGuide({ children }) {
  }
 
  const uploadContent = async (data) => {
+  console.log(data)
   try {
     if (!token) return;
     const res = await axios.post(
@@ -114,7 +115,7 @@ function StudyGuide({ children }) {
 
     const message = res?.data?.message || "Upload PDF Successfully";
     toast.success(message);
-    contentPdfData()
+    contentPdfData(data)
 
   } catch (error) {
     console.error(error);
@@ -122,22 +123,6 @@ function StudyGuide({ children }) {
   }
 };
 
-const contentPdfData = async () => {
-  try {
-    if(!token) return
-
-    const res = await axios.get(`${API}/api/auth/user/get/pdf` , {
-      headers : {
-        Authorization : `Bearer ${token}`
-      }
-    })
-    if(res.status == 200) {
-      setData(res.data.data || [])
-    }
-  } catch (error) {
-    console.log(error)
-  }
-}
 
 const deleteUserHandler = async (delId) => {
   try {
@@ -159,6 +144,22 @@ const deleteUserHandler = async (delId) => {
   }
 }
 
+const contentPdfData = async(data) => {
+  try {
+    if(!token) return 
+    const res = await axios.get(`${API}/api/auth/user/get/pdf` , {
+      headers : {
+        Authorization : `Bearer ${token}`
+      },
+      params : data
+    })
+    if(res.status === 200) {
+      setData(res.data.data || [])
+    }
+  } catch (error) {
+    console.log(error?.message)
+  }
+}
 const deletePdfHandler = async (pdfId) => {
   try {
     setLoading(true)
@@ -182,11 +183,6 @@ const deletePdfHandler = async (pdfId) => {
     setLoading(false)
   }
 }
-useEffect(() => {
-  if(token) {
-    contentPdfData()
-  }
-},[token])
  useEffect(() => {
   if(token) {
     getUser()
@@ -207,7 +203,9 @@ useEffect(() => {
     url,
     setUrl,
     deleteUserHandler,
-    deletePdfHandler
+    deletePdfHandler,
+    contentPdfData
+   
     
   };
 
