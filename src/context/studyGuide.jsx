@@ -45,27 +45,41 @@ function StudyGuide({ children }) {
   };
 
   //! LOGIN
-  const loginUser = async (data) => {
-    try {
-      setLoading(true);
+ const loginUser = async (data) => {
+  try {
+    setLoading(true);
 
-      const res = await axios.post(`${API}/api/auth/user/login`, data);
+    const res = await axios.post(`${API}/api/auth/user/login`, data);
 
-      if (res.status === 200) {
-        const { token, role } = res.data.data;
+  
+    const { token, role } = res.data.data;
 
-        sessionStorage.setItem("token", token);
-        sessionStorage.setItem("role", role);
+    sessionStorage.setItem("token", token);
+    sessionStorage.setItem("role", role);
 
-        toast.success("Login Successfully");
-        navigate("/");
-      }
-    } catch (error) {
-      toast.error(error.response?.data?.message || "Login failed");
-    } finally {
-      setLoading(false);
+    toast.success(res.data.message || "Login successfully");
+    navigate("/");
+
+  } catch (error) {
+    const status = error.response?.status;
+
+    //! 403 - Email not verified
+    if (status === 403) {
+      toast.error(
+        error.response?.data?.message ||
+        "Email not verified. Please verify your email."
+      );
+      navigate("/verify-email");
+    } else {
+      //  Other errors
+      toast.error(
+        error.response?.data?.message || "Login failed"
+      );
     }
-  };
+  } finally {
+    setLoading(false);
+  }
+};
 
   //! LOGOUT
   const logoutHandler = async () => {
@@ -183,6 +197,23 @@ const deletePdfHandler = async (pdfId) => {
     setLoading(false)
   }
 }
+
+const EmailVerifyHandler = async (data) => {
+  try {
+    setLoading(true)
+    console.log(data)
+    const res = await axios.post(`${API}/api/auth/user/verify-email` , data)
+
+    if(res.status === 200) {
+      toast.success(res.data.message || "Email Verified Successfully")
+      navigate("/login-account")
+    }
+  } catch (error) {
+    toast.error(error?.response?.data?.message || "Email verification failed")
+  }finally {
+    setLoading(false)
+  }
+}
  useEffect(() => {
   if(token) {
     getUser()
@@ -204,7 +235,8 @@ const deletePdfHandler = async (pdfId) => {
     setUrl,
     deleteUserHandler,
     deletePdfHandler,
-    contentPdfData
+    contentPdfData,
+    EmailVerifyHandler
    
     
   };

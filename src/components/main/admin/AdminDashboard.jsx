@@ -138,7 +138,7 @@ function AdminDashboard() {
           <div className="p-3 sm:p-4 border-t border-white/10">
             <div className="flex items-center gap-3 px-2">
               <div className="w-10 h-10 bg-gradient-to-br from-rose-400 to-pink-500 rounded-full flex items-center justify-center text-lg font-bold flex-shrink-0">
-                {adminUser.username?.charAt(0).toUpperCase() ?? "A"}
+                {adminUser.username?.charAt(0).toUpperCase() ?? "?"}
               </div>
               {showLabels && (
                 <div className="flex-1 animate-fadeIn overflow-hidden">

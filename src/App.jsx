@@ -22,6 +22,7 @@ import AdminSignIn from "./components/main/admin/AdminSignIn";
 
 import ProtectedRoutes from "./components/protect/ProtectedRoutes";
 import ShowContent from "./components/main/admin/material/ShowContent";
+import Verify from "./components/main/Verify";
 
 function App() {
   return (
@@ -44,6 +45,7 @@ function App() {
         {/* Password Recovery (must be public) */}
         <Route path="/forget-password" element={<ForgetPassword />} />
         <Route path="/reset-password/:token" element={<ResetPassword />} />
+        <Route path="/verify-email" element={<Verify/>}/>
 
         {/* Protected Routes */}
         <Route
