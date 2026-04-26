@@ -1,4 +1,7 @@
-import { useState } from "react";
+import axios from "axios";
+import { useContext, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { userAuth } from "../../context/StudyGuide";
 
 const courseData = {
   BCA: {
@@ -67,6 +70,8 @@ export default function App() {
   const [selectedCourse, setSelectedCourse] = useState(null);
   const [selectedSem, setSelectedSem] = useState(null);
   const [selectedSubject, setSelectedSubject] = useState(null);
+  const navigate = useNavigate()
+  const {setUserContentUrl} = useContext(userAuth)
 
   const course = selectedCourse ? courseData[selectedCourse] : null;
   const subjects = course && selectedSem ? course.semesters[selectedSem] : null;
@@ -76,12 +81,39 @@ export default function App() {
     setSelectedSem(null);
     setSelectedSubject(null);
   };
-
   const handleSemSelect = (sem) => {
     setSelectedSem(sem);
     setSelectedSubject(null);
   };
+  const token = sessionStorage.getItem("token")
+  const fetchUserContent = async (subjectName) => {
+  try {
+    console.log(subjectName)
+    if (!token || !subjectName) return;
 
+    const res = await axios.get(
+      "http://localhost:3000/api/auth/user/get-data",
+      {
+        params: {subjectName},
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    if (res.status === 200) {
+      console.log(res.data.data)
+      setUserContentUrl(res.data.data);
+      selectedSubject(null)
+    }
+  } catch (error) {
+    console.error("Error fetching user content:", error);
+  }
+};
+
+useEffect(() => {
+  fetchUserContent(selectedSubject);
+}, [selectedSubject, token]);
   const renderRight = () => {
     if (selectedSubject && course) {
       return (
@@ -93,18 +125,9 @@ export default function App() {
             <h2 className="text-2xl font-extrabold text-white leading-snug">{selectedSubject}</h2>
           </div>
           <div className="flex-1 overflow-y-auto p-6 space-y-3 bg-white">
-            {subjectDetails.map((item, i) => (
-              <div key={i} className="bg-white rounded-xl p-5 border border-gray-200 shadow-sm">
-                <div className="flex items-center gap-2 mb-2">
-                  <span className="text-lg">{item.icon}</span>
-                  <h3 className="text-sm font-bold text-gray-900">{item.label}</h3>
-                </div>
-                <p className="text-sm text-gray-600 leading-relaxed">
-                  {item.desc(selectedSubject, selectedCourse, selectedSem)}
-                </p>
-              </div>
-            ))}
-            <button className={`w-full bg-gradient-to-r ${course.color} text-white font-bold py-3.5 rounded-xl text-sm hover:opacity-90 transition-opacity mt-2`}>
+            <button 
+            onClick={() => navigate('/content')}
+            className={`w-full bg-gradient-to-r ${course.color} text-white font-bold py-3.5 rounded-xl text-sm hover:opacity-90 transition-opacity mt-2`}>
               View Study Materials →
             </button>
           </div>

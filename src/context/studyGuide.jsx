@@ -12,7 +12,9 @@ function StudyGuide({ children }) {
   const [user , setUser] = useState([])
   const [data , setData] = useState([])
   const [url , setUrl] = useState("")
+  const [userContentUrl , setUserContentUrl] = useState(null)
   const navigate = useNavigate();
+  console.log(userContentUrl)
 
  
   const role = sessionStorage.getItem("role");
@@ -236,7 +238,8 @@ const EmailVerifyHandler = async (data) => {
     deleteUserHandler,
     deletePdfHandler,
     contentPdfData,
-    EmailVerifyHandler
+    EmailVerifyHandler,
+    userContentUrl , setUserContentUrl
    
     
   };

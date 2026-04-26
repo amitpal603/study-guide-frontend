@@ -23,6 +23,7 @@ import AdminSignIn from "./components/main/admin/AdminSignIn";
 import ProtectedRoutes from "./components/protect/ProtectedRoutes";
 import ShowContent from "./components/main/admin/material/ShowContent";
 import Verify from "./components/main/Verify";
+import ShowUserContent from "./components/main/ShowUserContent";
 
 function App() {
   return (
@@ -65,7 +66,15 @@ function App() {
             </ProtectedRoutes>
           }
         />
+        <Route
+        path="/content"
 
+        element={
+          <ProtectedRoutes>
+            <ShowUserContent/>
+          </ProtectedRoutes>
+        }
+        />
         <Route
           path="/aktu-university"
           element={
