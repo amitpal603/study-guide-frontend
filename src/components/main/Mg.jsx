@@ -88,32 +88,45 @@ export default function App() {
   const token = sessionStorage.getItem("token")
   const fetchUserContent = async (subjectName) => {
   try {
-    console.log(subjectName)
     if (!token || !subjectName) return;
+
+    console.log("Fetching for:", subjectName);
 
     const res = await axios.get(
       "http://localhost:3000/api/auth/user/get-data",
       {
-        params: {subjectName},
+        params: { subjectName },
         headers: {
           Authorization: `Bearer ${token}`,
         },
       }
     );
 
-    if (res.status === 200) {
-      console.log(res.data.data)
-      setUserContentUrl(res.data.data);
-      selectedSubject(null)
+    const data = res?.data?.data;
+
+    console.log("API response:", data);
+
+    // ✅ Handle empty properly
+    if (!data || (Array.isArray(data) && data.length === 0)) {
+      setUserContentUrl([]);
+      return;
     }
+
+    setUserContentUrl(data);
+
+    
   } catch (error) {
     console.error("Error fetching user content:", error);
+
+    // ✅ Reset on error
+    setUserContentUrl([]);
   }
 };
-
 useEffect(() => {
-  fetchUserContent(selectedSubject);
-}, [selectedSubject, token]);
+  if(selectedSubject) {
+    fetchUserContent(selectedSubject)
+  }
+}, [selectedSubject]);
   const renderRight = () => {
     if (selectedSubject && course) {
       return (
