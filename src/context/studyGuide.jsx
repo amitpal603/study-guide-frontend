@@ -21,7 +21,7 @@ function StudyGuide({ children }) {
   const token = sessionStorage.getItem("token");
 
   
-  const API = "http://localhost:3000"; 
+  const API = "http://localhost:3000";
 
   //! REGISTER
   const registerUser = async (data) => {

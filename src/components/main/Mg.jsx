@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { userAuth } from "../../context/StudyGuide";
 
@@ -58,75 +58,120 @@ const courseData = {
   },
 };
 
-const subjectDetails = [
-  { icon: "📚", label: "Overview", desc: (sub, course, sem) => `${sub} is a core subject in the ${course} program, Semester ${sem}. It covers fundamental concepts and practical applications relevant to industry standards.` },
-  { icon: "🎯", label: "Learning Objectives", desc: () => "Understand theoretical foundations, apply concepts to real-world problems, and develop strong analytical and problem-solving skills." },
-  { icon: "📝", label: "Assessment", desc: () => "Internal (40%): assignments, quizzes, mid-term. External (60%): end-semester examination." },
-  { icon: "📖", label: "Reference Books", desc: () => "Prescribed textbooks, supplementary materials, online resources, and faculty-provided notes." },
-  { icon: "⏱️", label: "Duration", desc: () => "4 hrs/week — 2 theory + 2 practical sessions over 16 weeks." },
-];
+// Build a flat search index from courseData
+const buildSearchIndex = () => {
+  const results = [];
+  Object.entries(courseData).forEach(([courseKey, courseVal]) => {
+    Object.entries(courseVal.semesters).forEach(([sem, subjects]) => {
+      subjects.forEach((subject) => {
+        results.push({
+          courseKey,
+          courseLabel: courseVal.label,
+          courseFull: courseVal.full,
+          color: courseVal.color,
+          sem: Number(sem),
+          subject,
+        });
+      });
+    });
+  });
+  return results;
+};
+
+const searchIndex = buildSearchIndex();
 
 export default function App() {
   const [selectedCourse, setSelectedCourse] = useState(null);
   const [selectedSem, setSelectedSem] = useState(null);
   const [selectedSubject, setSelectedSubject] = useState(null);
-  const navigate = useNavigate()
-  const {setUserContentUrl} = useContext(userAuth)
+
+  // Search state
+  const [searchQuery, setSearchQuery] = useState("");
+  const [searchResults, setSearchResults] = useState([]);
+  const [showDropdown, setShowDropdown] = useState(false);
+  const searchRef = useRef(null);
+  console.log(searchQuery)
+  const navigate = useNavigate();
+  const { setUserContentUrl } = useContext(userAuth);
 
   const course = selectedCourse ? courseData[selectedCourse] : null;
   const subjects = course && selectedSem ? course.semesters[selectedSem] : null;
+
+  // Search logic
+  useEffect(() => {
+    const q = searchQuery.trim().toLowerCase();
+    if (!q) {
+      setSearchResults([]);
+      setShowDropdown(false);
+      return;
+    }
+    const filtered = searchIndex.filter(
+      (item) =>
+        item.subject.toLowerCase().includes(q) ||
+        item.courseLabel.toLowerCase().includes(q) ||
+        item.courseFull.toLowerCase().includes(q)
+    );
+    setSearchResults(filtered.slice(0, 8));
+    setShowDropdown(true);
+  }, [searchQuery]);
+
+  // Close dropdown on outside click
+  useEffect(() => {
+    const handler = (e) => {
+      if (searchRef.current && !searchRef.current.contains(e.target)) {
+        setShowDropdown(false);
+      }
+    };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, []);
+
+  const handleSearchSelect = (item) => {
+    setSelectedCourse(item.courseKey);
+    setSelectedSem(item.sem);
+    setSelectedSubject(item.subject);
+    setSearchQuery("");
+    setShowDropdown(false);
+  };
 
   const handleCourseSelect = (key) => {
     setSelectedCourse(key);
     setSelectedSem(null);
     setSelectedSubject(null);
   };
+
   const handleSemSelect = (sem) => {
     setSelectedSem(sem);
     setSelectedSubject(null);
   };
-  const token = sessionStorage.getItem("token")
+
+  const token = sessionStorage.getItem("token");
+
   const fetchUserContent = async (subjectName) => {
-  try {
-    if (!token || !subjectName) return;
-
-    console.log("Fetching for:", subjectName);
-
-    const res = await axios.get(
-      "http://localhost:3000/api/auth/user/get-data",
-      {
+    try {
+      if (!token || !subjectName) return;
+      const res = await axios.get("http://localhost:3000/api/auth/user/get-data", {
         params: { subjectName },
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      const data = res?.data?.data;
+      if (!data || (Array.isArray(data) && data.length === 0)) {
+        setUserContentUrl([]);
+        return;
       }
-    );
-
-    const data = res?.data?.data;
-
-    console.log("API response:", data);
-
-    // ✅ Handle empty properly
-    if (!data || (Array.isArray(data) && data.length === 0)) {
+      setUserContentUrl(data);
+    } catch (error) {
+      console.error("Error fetching user content:", error);
       setUserContentUrl([]);
-      return;
     }
+  };
 
-    setUserContentUrl(data);
+  useEffect(() => {
+    if (selectedSubject) {
+      fetchUserContent(selectedSubject);
+    }
+  }, [selectedSubject]);
 
-    
-  } catch (error) {
-    console.error("Error fetching user content:", error);
-
-    // ✅ Reset on error
-    setUserContentUrl([]);
-  }
-};
-useEffect(() => {
-  if(selectedSubject) {
-    fetchUserContent(selectedSubject)
-  }
-}, [selectedSubject]);
   const renderRight = () => {
     if (selectedSubject && course) {
       return (
@@ -138,9 +183,10 @@ useEffect(() => {
             <h2 className="text-2xl font-extrabold text-white leading-snug">{selectedSubject}</h2>
           </div>
           <div className="flex-1 overflow-y-auto p-6 space-y-3 bg-white">
-            <button 
-            onClick={() => navigate('/content')}
-            className={`w-full bg-gradient-to-r ${course.color} text-white font-bold py-3.5 rounded-xl text-sm hover:opacity-90 transition-opacity mt-2`}>
+            <button
+              onClick={() => navigate("/content")}
+              className={`w-full bg-gradient-to-r ${course.color} text-white font-bold py-3.5 rounded-xl text-sm hover:opacity-90 transition-opacity mt-2`}
+            >
               View Study Materials →
             </button>
           </div>
@@ -169,7 +215,11 @@ useEffect(() => {
                   }`}
                 >
                   <span className="flex items-center gap-3">
-                    <span className={`w-2 h-2 rounded-full flex-shrink-0 ${selectedSubject === sub ? "bg-white" : `bg-gradient-to-br ${course.color}`}`} />
+                    <span
+                      className={`w-2 h-2 rounded-full flex-shrink-0 ${
+                        selectedSubject === sub ? "bg-white" : `bg-gradient-to-br ${course.color}`
+                      }`}
+                    />
                     {sub}
                   </span>
                   <svg className="w-4 h-4 opacity-40 group-hover:opacity-100 transition-opacity flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -221,26 +271,47 @@ useEffect(() => {
     );
   };
 
+  // Highlight matching text in search results
+  const highlightMatch = (text, query) => {
+    if (!query) return text;
+    const idx = text.toLowerCase().indexOf(query.toLowerCase());
+    if (idx === -1) return text;
+    return (
+      <>
+        {text.slice(0, idx)}
+        <mark className="bg-yellow-100 text-yellow-800 rounded px-0.5">{text.slice(idx, idx + query.length)}</mark>
+        {text.slice(idx + query.length)}
+      </>
+    );
+  };
+
   return (
     <div className="h-screen bg-white text-gray-900 font-sans flex flex-col overflow-hidden">
       {/* Top Bar */}
-      <header className="shrink-0 flex items-center justify-between px-6 py-3.5 border-b border-gray-200 bg-white z-10">
-        <div className="flex items-center gap-3">
+      <header className="shrink-0 flex items-center justify-between px-6 py-3.5 border-b border-gray-200 bg-white z-20">
+        {/* Logo */}
+        <div className="mt-20 flex items-center gap-3 w-48">
           <div className="w-7 h-7 bg-gradient-to-br from-violet-600 to-indigo-600 rounded-lg flex items-center justify-center text-sm">🎓</div>
           <span className="font-extrabold text-sm tracking-wide text-gray-900">Course Navigator</span>
         </div>
-        <div className="flex items-center gap-1.5 text-xs text-gray-400 font-medium">
+
+        {/* Breadcrumb — center */}
+        <div className=" mt-20 flex-1 flex items-center justify-center gap-1.5 text-xs text-gray-400 font-medium">
           <span
             className={`cursor-pointer hover:text-gray-900 transition-colors ${!selectedCourse ? "text-gray-900 font-bold" : ""}`}
             onClick={() => { setSelectedCourse(null); setSelectedSem(null); setSelectedSubject(null); }}
-          >All Courses</span>
+          >
+            All Courses
+          </span>
           {selectedCourse && (
             <>
               <span className="text-gray-300">/</span>
               <span
                 className={`cursor-pointer hover:text-gray-900 transition-colors ${selectedCourse && !selectedSem ? "text-gray-900 font-bold" : ""}`}
                 onClick={() => { setSelectedSem(null); setSelectedSubject(null); }}
-              >{selectedCourse}</span>
+              >
+                {selectedCourse}
+              </span>
             </>
           )}
           {selectedSem && (
@@ -249,7 +320,9 @@ useEffect(() => {
               <span
                 className={`cursor-pointer hover:text-gray-900 transition-colors ${selectedSem && !selectedSubject ? "text-gray-900 font-bold" : ""}`}
                 onClick={() => setSelectedSubject(null)}
-              >Sem {selectedSem}</span>
+              >
+                Sem {selectedSem}
+              </span>
             </>
           )}
           {selectedSubject && (
@@ -259,14 +332,85 @@ useEffect(() => {
             </>
           )}
         </div>
-        <div className="w-24" />
+
+        {/* Search Bar — right corner */}
+        <div className=" mt-20 relative" ref={searchRef}>
+          <div className="relative w-56">
+            <div className="absolute inset-y-0 left-3 flex items-center pointer-events-none">
+              <svg className="w-3.5 h-3.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-4.35-4.35M17 11A6 6 0 1 1 5 11a6 6 0 0 1 12 0z" />
+              </svg>
+            </div>
+
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              onFocus={() => searchQuery.trim() && setShowDropdown(true)}
+              placeholder="Search subjects..."
+              className=" w-full pl-8 pr-8 py-2 text-xs rounded-lg border border-gray-200 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-violet-400 focus:border-transparent focus:bg-white transition-all placeholder-gray-400"
+            />
+
+            {searchQuery && (
+              <button
+                onClick={() => { setSearchQuery(""); setShowDropdown(false); }}
+                className="absolute inset-y-0 right-2.5 flex items-center text-gray-400 hover:text-gray-600 transition-colors"
+              >
+                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            )}
+          </div>
+
+          {/* Dropdown Results — opens to the left so it doesn't overflow */}
+          {showDropdown && (
+            <div className="absolute top-full mt-2 right-0 w-80 bg-white border border-gray-200 rounded-xl shadow-xl z-50 overflow-hidden">
+              {searchResults.length === 0 ? (
+                <div className="px-4 py-5 text-center text-sm text-gray-400">
+                  <div className="text-xl mb-1">🔍</div>
+                  No results for "<span className="font-medium text-gray-600">{searchQuery}</span>"
+                </div>
+              ) : (
+                <>
+                  <div className="px-4 py-2 border-b border-gray-100 flex items-center justify-between">
+                    <span className="text-xs font-bold tracking-widest uppercase text-gray-400">Results</span>
+                    <span className="text-xs text-gray-400">{searchResults.length} found</span>
+                  </div>
+                  <ul className="max-h-72 overflow-y-auto divide-y divide-gray-50">
+                    {searchResults.map((item, i) => (
+                      <li key={i}>
+                        <button
+                          onClick={() => handleSearchSelect(item)}
+                          className="w-full text-left px-4 py-3 flex items-center gap-3 hover:bg-gray-50 transition-colors group"
+                        >
+                          <div className={`w-2.5 h-2.5 rounded-full bg-gradient-to-br ${item.color} flex-shrink-0`} />
+                          <div className="flex-1 min-w-0">
+                            <div className="text-sm font-semibold text-gray-800 truncate">
+                              {highlightMatch(item.subject, searchQuery)}
+                            </div>
+                            <div className="text-xs text-gray-400 mt-0.5">
+                              {item.courseLabel} · Semester {item.sem}
+                            </div>
+                          </div>
+                          <svg className="w-3.5 h-3.5 text-gray-300 group-hover:text-gray-500 flex-shrink-0 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                          </svg>
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                </>
+              )}
+            </div>
+          )}
+        </div>
       </header>
 
       {/* Main Split Layout */}
       <div className="flex flex-1 overflow-hidden">
-
         {/* LEFT PANEL */}
-        <div className=" m-10 w-64 shrink-0 bg-gray-50 border-r border-gray-200 flex flex-col overflow-y-auto">
+        <div className="m-10 w-64 shrink-0 bg-gray-50 border-r border-gray-200 flex flex-col overflow-y-auto">
           <div className="p-4">
             <p className="text-xs font-bold tracking-widest uppercase text-gray-400 mb-3 px-1">Courses</p>
             <div className="space-y-1.5">
@@ -318,10 +462,7 @@ useEffect(() => {
         </div>
 
         {/* RIGHT PANEL */}
-        <div className="flex-1 overflow-hidden bg-white flex flex-col">
-          {renderRight()}
-        </div>
-
+        <div className="flex-1 overflow-hidden bg-white flex flex-col">{renderRight()}</div>
       </div>
     </div>
   );
